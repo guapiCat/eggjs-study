@@ -10,15 +10,12 @@ module.exports = app => {
             type: String,
             required: true,
         },
-        _id: {
-            type: Schema.ObjectId,
-            ref: 'Tags',
-            required: true,
-        },
         pwd: {
             type: String,
         },
-    }, { versionKey: false });
+    }, {
+        versionKey: false
+    });
 
     return mongoose.model('User', UserSchema, 'user'); // 我的理解：Article是指定查找的入口，随便取；ArticleSchema是参数；article是你数据集合表的名称
 };

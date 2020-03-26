@@ -4,18 +4,37 @@ const Service = require('egg').Service;
 
 class UserService extends Service {
     /**
-       * 根据ID获取单个项目
-       */
-    async getUserMsg() {
-        const { ctx, app } = this;
+     * 查询个人信息
+     */
+    async getUserMsg(query) {
+        const {
+            ctx,
+            service
+        } = this;
         try {
-            const results = await ctx.model.User.find({ // Article为modal/article.js里面命名的名字
-                name: 'naruto',
+            const results = await ctx.model.User.find({
+                name: query.name,
             });
-            return results;
+            let token = await service.actionToken.apply(results[0]) // 根据_id生成一个token
+            return {
+                token: token
+            }
         } catch (err) {
             ctx.body = JSON.stringify(err);
         }
     }
+
+    async addUser(query) {
+        const {
+            ctx,
+            app
+        } = this;
+        console.log('添加query', query, typeof query);
+        const results = new ctx.model.User(query);
+        results.save();
+        return results;
+    }
+
+
 }
 module.exports = UserService;
